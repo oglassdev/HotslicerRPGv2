@@ -1,0 +1,10 @@
+name: HotslicerRPG
+version: '${project.version}'
+main: com.hotslicerrpg.rpg.Main
+depend: [ NBTAPI,Citizens,WorldGuard,WorldEdit ]
+authors: [ oglass ]
+description: Official HotslicerRPG plugin.
+
+commands:
+  spawnentity:
+    description: hi
