@@ -4,6 +4,7 @@ import com.hotslicerrpg.rpg.Entities.Entity;
 import com.hotslicerrpg.rpg.Entities.MinesStalker;
 import com.hotslicerrpg.rpg.Items.PlayerStats;
 import com.hotslicerrpg.rpg.Listeners.EntityDamage;
+import com.hotslicerrpg.rpg.Regions.PlayerMove;
 import com.hotslicerrpg.rpg.Scripting.ScriptFile;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -11,9 +12,6 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -37,6 +35,7 @@ public final class Main extends JavaPlugin {
 
         new MobDrops(this);
         new EntityDamage(this);
+        new PlayerMove(this);
         new ScriptFile(new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "Scripts" + File.separator + "Main.js"));
 
         getCommand("spawnentity").setExecutor((sender, command, s, strings) -> {
