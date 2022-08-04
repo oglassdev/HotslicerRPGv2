@@ -27,5 +27,5 @@ public class PlayerMove {
             }
         },0,10);
     }
-    public static void get
+    public static void getR
 }
