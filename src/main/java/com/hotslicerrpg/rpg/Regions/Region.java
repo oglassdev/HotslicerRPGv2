@@ -5,6 +5,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Region {
@@ -36,6 +37,9 @@ public class Region {
             if (reg.inRegion(loc)) return reg;
         }
         return null;
+    }
+    public static Collection<Region> getRegions() {
+        return regions.values();
     }
     public static Region getRegion(String name) {
         return regions.getOrDefault(name,null);

@@ -16,8 +16,10 @@ public class PlayerMove {
     public PlayerMove(Main plugin) {
         Bukkit.getScheduler().runTaskTimer(plugin,() -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
+                Bukkit.getScheduler().runTaskAsynchronously(plugin,() -> getDisallowedRegions(p));
                 UUID uuid = p.getUniqueId();
                 Location lastLoc = lastLocations.get(uuid);
+                if (!disallowedRegions.containsKey(p.getUniqueId())) return;
                 for (String name : disallowedRegions.get(uuid)) {
                     Region region = Region.getRegion(name);
                     if (region == null) continue;
@@ -27,5 +29,12 @@ public class PlayerMove {
             }
         },0,10);
     }
-    public static void getR
+    public static void getDisallowedRegions(Player player) {
+        HashSet<String> set = new HashSet<>();
+        for (Region region : Region.getRegions()) {
+            if (region.getPermission() == null) continue;
+            set.add(region.getPermission());
+        }
+        disallowedRegions.put(player.getUniqueId(),set);
+    }
 }

@@ -56,7 +56,7 @@ public class Item {
     public ItemStack getItem() {
         ItemStack stack = new ItemStack(material,1,dataValue);
         ItemMeta meta = stack.getItemMeta();
-        String displayName = name;
+        String displayName = Utils.color(name);
         List<String> list = new ArrayList<>();
         if (stats.length > 0) {
             for (Stat stat : stats) {
@@ -66,10 +66,10 @@ public class Item {
         list.addAll(Arrays.asList(lore));
         if (rarity != Rarity.NONE) {
             list.add("");
-            list.add(Utils.color(rarity.toString()));
-            displayName = Utils.color('&' + rarity.color + name);
+            list.add(Utils.color("&" + rarity.color + "&l" + rarity.name()));
+            displayName = Utils.color("&" + rarity.color + name);
         }
-        meta.setDisplayName(Utils.color(displayName));
+        meta.setDisplayName(displayName);
         meta.setLore(list);
         stack.setItemMeta(meta);
         NBTItem nbti = new NBTItem(stack);

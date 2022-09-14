@@ -1,15 +1,11 @@
 package com.hotslicerrpg.rpg.Items;
 
-import com.google.common.collect.Lists;
 import com.hotslicerrpg.rpg.Utils;
-import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -43,11 +39,11 @@ public class PlayerStats {
 
     private void initDefaultStats() {
         for (StatType type : StatType.values()) {
-            if (!statMap.containsKey(type) && type != StatType.Damage) statMap.put(type, new HashMap<>());
+            if (!statMap.containsKey(type) && type != StatType.DAMAGE) statMap.put(type, new HashMap<>());
         }
         setDefault();
         updateStats();
-        health = getStat(StatType.Health);
+        health = getStat(StatType.HEALTH);
     }
 
     private Set<Stat> getItemStats(ItemStack item) {
@@ -57,7 +53,7 @@ public class PlayerStats {
     }
 
     public void updateStats() {
-        double maxHealth = getStat(StatType.Health)/5;
+        double maxHealth = getStat(StatType.HEALTH)/5;
         if (maxHealth > 40) maxHealth = 40;
         player.setMaxHealth(maxHealth);
 
@@ -67,7 +63,7 @@ public class PlayerStats {
         player.setHealth(vanillaHealth);
 
         HashMap<StatSource, Set<Stat>> playerEquipment = new HashMap<>();
-        if (!player.isFlying()) player.setWalkSpeed((float) (0.2 * getStat(StatType.Speed)/100));
+        if (!player.isFlying()) player.setWalkSpeed((float) (0.2 * getStat(StatType.SPEED)/100));
 
         Set<Stat> s0 = getItemStats(player.getEquipment().getBoots());
         playerEquipment.put(StatSource.BootsStat, s0);
@@ -83,27 +79,27 @@ public class PlayerStats {
         playerEquipment.forEach((source,stats) -> {
             if (stats == null) {
                 for (StatType type : StatType.values()) {
-                    if (type != StatType.Damage) statMap.get(type).put(source, 0.0);
+                    if (type != StatType.DAMAGE) statMap.get(type).put(source, 0.0);
                 }
             } else {
                 HashSet<StatType> types = new HashSet<>();
                 for (Stat stat : stats) {
                     types.add(stat.getType());
-                    if (stat.getType() != StatType.Damage) statMap.get(stat.getType()).put(source, stat.getAmount());
+                    if (stat.getType() != StatType.DAMAGE) statMap.get(stat.getType()).put(source, stat.getAmount());
                 }
                 for (StatType type : StatType.values()) {
-                    if (!types.contains(type) && type != StatType.Damage) statMap.get(type).put(source, 0.0);
+                    if (!types.contains(type) && type != StatType.DAMAGE) statMap.get(type).put(source, 0.0);
                 }
             }
         });
 
-        if (System.currentTimeMillis() >= actionbarExpire) actionbar = "&c" + (int) health + "/" + getStat(StatType.Health) + " ♥     " + "&a" + (int) getStat(StatType.Defense) + " ✚     ";
+        if (System.currentTimeMillis() >= actionbarExpire) actionbar = "&c" + (int) health + "/" + getStat(StatType.HEALTH) + " ♥     " + "&a" + (int) getStat(StatType.DEFENSE) + " ✚     ";
     }
 
     public double getStat(StatType type) {
         double amount = 0;
         for (double d : statMap.get(type).values()) { amount+=d; }
-        if (type == StatType.Speed && amount > 200) return 200;
+        if (type == StatType.SPEED && amount > 200) return 200;
         return amount;
     }
 
@@ -116,16 +112,19 @@ public class PlayerStats {
     }
 
     public void setDefault() {
-        statMap.get(StatType.Defense).put(StatSource.Default, 0.0);
-        statMap.get(StatType.ExplosionDefense).put(StatSource.Default, 0.0);
-        statMap.get(StatType.FallDefense).put(StatSource.Default, 0.0);
-        statMap.get(StatType.ProjectileDefense).put(StatSource.Default, 0.0);
-        statMap.get(StatType.FireDefense).put(StatSource.Default, 0.0);
-        statMap.get(StatType.Health).put(StatSource.Default, 100.0);
-        statMap.get(StatType.CritChance).put(StatSource.Default, 30.0);
-        statMap.get(StatType.CritDamage).put(StatSource.Default, 100.0);
-        statMap.get(StatType.Speed).put(StatSource.Default, 100.0);
-        statMap.get(StatType.Strength).put(StatSource.Default, 0.0);
+        statMap.get(StatType.DEFENSE).put(StatSource.Default, 0.0);
+        statMap.get(StatType.EXPLOSION_DEFENSE).put(StatSource.Default, 0.0);
+        statMap.get(StatType.FALL_DEFENSE).put(StatSource.Default, 0.0);
+        statMap.get(StatType.PROJECTILE_DEFENSE).put(StatSource.Default, 0.0);
+        statMap.get(StatType.FIRE_DEFENSE).put(StatSource.Default, 0.0);
+        statMap.get(StatType.HEALTH).put(StatSource.Default, 100.0);
+        statMap.get(StatType.CRIT_CHANCE).put(StatSource.Default, 30.0);
+        statMap.get(StatType.CRIT_DAMAGE).put(StatSource.Default, 100.0);
+        statMap.get(StatType.SPEED).put(StatSource.Default, 100.0);
+        statMap.get(StatType.STRENGTH).put(StatSource.Default, 0.0);
+        statMap.get(StatType.MINING_SPEED).put(StatSource.Default, 10.0);
+        statMap.get(StatType.MINING_LUCK).put(StatSource.Default, 1.0);
+        statMap.get(StatType.BREAKING_POWER).put(StatSource.Default, 0.0);
     }
 
     public void resetAdmin() {
@@ -144,7 +143,7 @@ public class PlayerStats {
     }
 
     public void regenerateStats() {
-        double maxHealth = getStat(StatType.Health);
+        double maxHealth = getStat(StatType.HEALTH);
         if (health > maxHealth);
         else if (health >= maxHealth-maxHealth*0.05) health = maxHealth;
         else health+=maxHealth*0.05;
@@ -156,22 +155,22 @@ public class PlayerStats {
         switch (cause) {
             case ENTITY_EXPLOSION:
             case BLOCK_EXPLOSION:
-                damage /= getStat(StatType.ExplosionDefense) / 100 + 1;
+                damage /= getStat(StatType.EXPLOSION_DEFENSE) / 100 + 1;
                 strCause = " was exploded.";
             case PROJECTILE: {
-                damage /= getStat(StatType.ProjectileDefense) / 100 + 1;
+                damage /= getStat(StatType.PROJECTILE_DEFENSE) / 100 + 1;
                 strCause = " was shot.";
             }
             case FIRE_TICK:
             case FIRE:
             case LAVA:
-                damage /= getStat(StatType.FireDefense) / 100 + 1;
+                damage /= getStat(StatType.FIRE_DEFENSE) / 100 + 1;
                 strCause = " burnt to death.";
             case FALL:
-                damage /= getStat(StatType.FallDefense) + getStat(StatType.Defense) / 200 + 1;
+                damage /= getStat(StatType.FALL_DEFENSE) + getStat(StatType.DEFENSE) / 200 + 1;
                 strCause = " fell to death.";
             default:
-                damage /= getStat(StatType.Defense) / 100 + 1;
+                damage /= getStat(StatType.DEFENSE) / 100 + 1;
                 strCause = " died.";
         }
         damageCooldown = System.currentTimeMillis() + 500;
@@ -195,7 +194,7 @@ public class PlayerStats {
         player.setVelocity(new Vector(0,0,0));
         player.setFoodLevel(20);
         player.setSaturation(10);
-        health = getStat(StatType.Health);
+        health = getStat(StatType.HEALTH);
 
         if (!announce) return;
         for (Player p : player.getWorld().getPlayers()) {
@@ -211,7 +210,7 @@ public class PlayerStats {
         player.setVelocity(new Vector(0,0,0));
         player.setFoodLevel(20);
         player.setSaturation(10);
-        health = getStat(StatType.Health);
+        health = getStat(StatType.HEALTH);
 
         if (!announce) return;
         String str = entity.getCustomName();

@@ -3,19 +3,24 @@ package com.hotslicerrpg.rpg.Items;
 import org.bukkit.ChatColor;
 
 public enum StatType {
-    Defense("Defense", ChatColor.GREEN),
-    ProjectileDefense("Projectile Defense", ChatColor.DARK_GRAY),
-    ExplosionDefense("Explosion Defense", ChatColor.RED),
-    FireDefense("Fire Defense", ChatColor.GOLD),
-    FallDefense("Fall Defense", ChatColor.GRAY),
+    DEFENSE("Defense", ChatColor.GREEN),
+    PROJECTILE_DEFENSE("Projectile Defense", ChatColor.DARK_GRAY),
+    EXPLOSION_DEFENSE("Explosion Defense", ChatColor.RED),
+    FIRE_DEFENSE("Fire Defense", ChatColor.GOLD),
+    FALL_DEFENSE("Fall Defense", ChatColor.GRAY),
 
-    CritChance("Crit Chance", ChatColor.BLUE),
-    CritDamage("Crit Damage", ChatColor.RED),
-    Damage("Damage", ChatColor.RED),
-    Strength("Strength", ChatColor.RED),
+    CRIT_CHANCE("Crit Chance", ChatColor.BLUE),
+    CRIT_DAMAGE("Crit Damage", ChatColor.RED),
+    DAMAGE("Damage", ChatColor.RED),
+    STRENGTH("Strength", ChatColor.RED),
 
-    Speed("Speed", ChatColor.AQUA),
-    Health("Health", ChatColor.RED),;
+    SPEED("Speed", ChatColor.AQUA),
+    HEALTH("Health", ChatColor.RED),
+
+    MINING_SPEED("Mining Speed",ChatColor.GOLD),
+    MINING_LUCK("Mining Luck",ChatColor.LIGHT_PURPLE),
+    BREAKING_POWER("Breaking Power",ChatColor.DARK_GRAY)
+    ;
 
     private final String name;
     private final ChatColor color;
