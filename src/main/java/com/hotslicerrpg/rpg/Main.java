@@ -4,6 +4,7 @@ import com.hotslicerrpg.rpg.Entities.Entity;
 import com.hotslicerrpg.rpg.Entities.MinesStalker;
 import com.hotslicerrpg.rpg.Items.*;
 import com.hotslicerrpg.rpg.Listeners.EntityDamage;
+import com.hotslicerrpg.rpg.Listeners.JoinListener;
 import com.hotslicerrpg.rpg.Mining.MinesManager;
 import com.hotslicerrpg.rpg.Regions.PlayerMove;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
@@ -39,6 +40,7 @@ public final class Main extends JavaPlugin {
         new MobDrops(this);
         new EntityDamage(this);
         new PlayerMove(this);
+        new JoinListener(this);
         //new ScriptFile(new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "Scripts" + File.separator + "Main.js"));
         List<Stat> stats = new ArrayList<>();
         stats.add(new Stat(StatType.MINING_SPEED,50));
