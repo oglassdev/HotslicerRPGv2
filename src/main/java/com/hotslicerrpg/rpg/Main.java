@@ -1,21 +1,14 @@
 package com.hotslicerrpg.rpg;
 
-import com.hotslicerrpg.rpg.Entities.Entity;
-import com.hotslicerrpg.rpg.Entities.MinesStalker;
 import com.hotslicerrpg.rpg.Items.*;
 import com.hotslicerrpg.rpg.Listeners.EntityDamage;
-import com.hotslicerrpg.rpg.Listeners.JoinListener;
 import com.hotslicerrpg.rpg.Mining.MinesManager;
-import com.hotslicerrpg.rpg.Regions.PlayerMove;
-import net.minecraft.server.v1_8_R3.EntityArmorStand;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import com.hotslicerrpg.rpg.Quests.QuestFinishListener;
+import com.leonardobishop.quests.bukkit.BukkitQuestsPlugin;
+import me.lokka30.treasury.api.common.service.ServiceRegistry;
+import me.lokka30.treasury.api.economy.EconomyProvider;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -29,18 +22,24 @@ public final class Main extends JavaPlugin {
     private static Main plugin;
     private static MinesManager minesManager;
     private static CommandManager commandManager;
+    private static BukkitQuestsPlugin questsPlugin;
+    private static EconomyProvider economy;
 
     @Override
     public void onEnable() {
         plugin = this;
         commandManager = new CommandManager();
+        questsPlugin = (BukkitQuestsPlugin) Bukkit.getPluginManager().getPlugin("Quests");
+        if (getServer().getPluginManager().getPlugin("Treasury") != null) {
+            economy = ServiceRegistry.INSTANCE.serviceFor(EconomyProvider.class).get().get();
+        }
+
         ClassLoader cl = plugin.getClass().getClassLoader();
         Thread.currentThread().setContextClassLoader(cl);
 
         new MobDrops(this);
         new EntityDamage(this);
-        new PlayerMove(this);
-        new JoinListener(this);
+        new QuestFinishListener(this);
         //new ScriptFile(new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "Scripts" + File.separator + "Main.js"));
         List<Stat> stats = new ArrayList<>();
         stats.add(new Stat(StatType.MINING_SPEED,50));
@@ -95,11 +94,6 @@ public final class Main extends JavaPlugin {
                 }
             }
         }.runTaskTimer(plugin,10,10);
-        /*Region.addRegion(
-                new Region(
-                        WGBukkit.getRegionManager(Bukkit.getWorld("spawn")).getRegion("mines"),
-                        "Mines",
-                        "hot.region.mines"));*/
     }
 
     @Override
@@ -114,4 +108,6 @@ public final class Main extends JavaPlugin {
         return commandManager;
     }
     public static MinesManager getMinesManager() { return minesManager; }
+    public static BukkitQuestsPlugin getQuestPlugin() { return questsPlugin; }
+    public static EconomyProvider getEconomy() { return economy; }
 }

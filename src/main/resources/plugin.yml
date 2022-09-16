@@ -1,7 +1,7 @@
 name: HotslicerRPG
 version: '${project.version}'
 main: com.hotslicerrpg.rpg.Main
-depend: [ NBTAPI,Citizens,WorldGuard,WorldEdit ]
+depend: [ NBTAPI,Citizens,WorldGuard,WorldEdit,Quests,Treasury ]
 authors: [ oglass ]
 description: Official HotslicerRPG plugin.
 
