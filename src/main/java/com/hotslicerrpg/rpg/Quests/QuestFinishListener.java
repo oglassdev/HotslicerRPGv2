@@ -15,22 +15,27 @@ public class QuestFinishListener implements Listener {
     @EventHandler
     public void onQuestFinish(PlayerFinishQuestEvent event) {
         Player player = event.getPlayer();
-        Reward reward = new Reward(200);
+        Quest quest;
+        try {
+            quest = Quest.valueOf(event.getQuestProgress().getQuestId());
+        } catch (EnumConstantNotPresentException ignored) { return; }
+        Reward reward = quest.getReward();
+
         player.sendMessage(Utils.color("&a"));
-        player.sendMessage(Utils.color("&7------ &e&lQuest Complete!&7 -------"));
+        player.sendMessage(Utils.color("&7--------< &e&lQuest Complete!&7 >---------"));
         player.sendMessage(Utils.color("&a"));
-        player.sendMessage(Utils.color("&8| &a" + event.getQuestFinishMessage() + "&7 completed!"));
+        player.sendMessage(Utils.color("&8| &a" + quest.getName() + "&7 completed!"));
         player.playSound(player.getLocation(), Sound.LEVEL_UP, 1f,1f);
-        String[] rwd = reward.prettyArray();
-        if (rwd.length > 0) player.sendMessage(Utils.color("&8| &e&lRewards"));
-        for (String str : rwd) {
-            player.sendMessage(Utils.color(str));
+        if (reward != null) {
+            player.sendMessage(Utils.color("&8| &e&lRewards"));
+            for (String str : reward.prettyArray()) {
+                player.sendMessage(Utils.color(str));
+            }
+            reward.give(player);
         }
         player.sendMessage(Utils.color("&a"));
-        player.sendMessage(Utils.color("&7------------------------------"));
-        player.sendMessage(Utils.color("&a"));
+        player.sendMessage(Utils.color("&7------------------------------------"));
 
-        reward.give(player);
         event.setQuestFinishMessage(null);
     }
 }

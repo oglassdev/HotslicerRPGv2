@@ -42,7 +42,6 @@ public class Reward {
                     }
                     @Override
                     public void fail(@NotNull EconomyException e) {
-                        Utils.sendLog(Level.INFO, "ASDnaisdj iuaJSDiu ");
                         e.printStackTrace();
                     }
                 });
