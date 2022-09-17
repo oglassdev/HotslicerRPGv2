@@ -21,8 +21,7 @@ public class QuestFinishListener implements Listener {
         } catch (EnumConstantNotPresentException ignored) { return; }
         Reward reward = quest.getReward();
 
-        player.sendMessage(Utils.color("&a"));
-        player.sendMessage(Utils.color("&7--------< &e&lQuest Complete!&7 >---------"));
+        player.sendMessage(Utils.color("&8--------< &e&lQuest Complete!&7 >---------"));
         player.sendMessage(Utils.color("&a"));
         player.sendMessage(Utils.color("&8| &a" + quest.getName() + "&7 completed!"));
         player.playSound(player.getLocation(), Sound.LEVEL_UP, 1f,1f);
@@ -34,7 +33,7 @@ public class QuestFinishListener implements Listener {
             reward.give(player);
         }
         player.sendMessage(Utils.color("&a"));
-        player.sendMessage(Utils.color("&7------------------------------------"));
+        player.sendMessage(Utils.color("&8------------------------------------"));
 
         event.setQuestFinishMessage(null);
     }
