@@ -61,7 +61,7 @@ public class MinesManager {
         if (stats.getStat(StatType.BREAKING_POWER) < block.getRequiredPower()) return;
         sendMiningPacket(player,loc,state);
 
-        double time = block.getHardness()/stats.getStat(StatType.MINING_SPEED);
+        double time = block.getHardness()/stats.getStat(StatType.MINING_SPEED)*10;
         if (time < 1) time = 1;
         Bukkit.getScheduler().runTaskLater(plugin, () -> animate(player, loc, state + 1),(int)time);
     }

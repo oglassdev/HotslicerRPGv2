@@ -1,14 +1,15 @@
 package com.hotslicerrpg.rpg.Items;
 
 import com.hotslicerrpg.rpg.Utils;
+import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Item {
     private final String ID;
@@ -20,6 +21,7 @@ public class Item {
 
     private final Rarity rarity;
     private final Stat[] stats;
+    private final boolean uniqueItem;
     public Item(String ID, Material material, short dataValue,
                 String name, String[] lore, Rarity rarity, Stat[] stats) {
         this.ID = ID;
@@ -29,6 +31,18 @@ public class Item {
         this.lore = lore;
         this.rarity = rarity;
         this.stats = stats;
+        this.uniqueItem = false;
+    }
+    public Item(String ID, Material material, short dataValue,
+                String name, String[] lore, Rarity rarity, Stat[] stats, boolean uniqueItem) {
+        this.ID = ID;
+        this.material = material;
+        this.dataValue = dataValue;
+        this.name = name;
+        this.lore = lore;
+        this.rarity = rarity;
+        this.stats = stats;
+        this.uniqueItem = uniqueItem;
     }
 
     public String getName() {
@@ -52,28 +66,18 @@ public class Item {
     public String[] getLore() {
         return lore;
     }
+    public boolean isUniqueItem() { return uniqueItem; }
 
     public ItemStack getItem() {
         ItemStack stack = new ItemStack(material,1,dataValue);
         ItemMeta meta = stack.getItemMeta();
-        String displayName = Utils.color(name);
-        List<String> list = new ArrayList<>();
-        if (stats.length > 0) {
-            for (Stat stat : stats) {
-                list.add(Utils.color(stat.getName(true) + ": &7" + stat.getAmount()));
-            }
-        }
-        list.addAll(Arrays.asList(lore));
-        if (rarity != Rarity.NONE) {
-            list.add("");
-            list.add(Utils.color("&" + rarity.color + "&l" + rarity.name()));
-            displayName = Utils.color("&" + rarity.color + name);
-        }
-        meta.setDisplayName(displayName);
-        meta.setLore(list);
+        meta.setDisplayName(Utils.color("&" + rarity.color + name));
+        meta.setLore(ItemUtils.generateLore(this));
         stack.setItemMeta(meta);
         NBTItem nbti = new NBTItem(stack);
-        nbti.getOrCreateCompound("HotslicerRPG").setString("ID",ID);
+        NBTCompound comp = nbti.getOrCreateCompound("HotslicerRPG");
+        comp.setString("ID",ID);
+        if (uniqueItem) comp.setString("UUID", UUID.randomUUID().toString());
         return nbti.getItem();
     }
 

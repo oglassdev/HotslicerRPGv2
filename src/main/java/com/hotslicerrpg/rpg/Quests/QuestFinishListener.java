@@ -15,13 +15,15 @@ public class QuestFinishListener implements Listener {
     @EventHandler
     public void onQuestFinish(PlayerFinishQuestEvent event) {
         Player player = event.getPlayer();
+
         Quest quest;
         try {
             quest = Quest.valueOf(event.getQuestProgress().getQuestId());
         } catch (EnumConstantNotPresentException ignored) { return; }
         Reward reward = quest.getReward();
 
-        player.sendMessage(Utils.color("&8--------< &e&lQuest Complete!&7 >---------"));
+        if (quest.getQuestStage() == Quest.QuestStage.OBJECTIVE) player.sendMessage(Utils.color("&8------< &6&lObjective Complete!&8 >-------"));
+        else player.sendMessage(Utils.color("&8--------< &e&lQuest Complete!&8 >---------"));
         player.sendMessage(Utils.color("&a"));
         player.sendMessage(Utils.color("&8| &a" + quest.getName() + "&7 completed!"));
         player.playSound(player.getLocation(), Sound.LEVEL_UP, 1f,1f);
@@ -33,7 +35,12 @@ public class QuestFinishListener implements Listener {
             reward.give(player);
         }
         player.sendMessage(Utils.color("&a"));
-        player.sendMessage(Utils.color("&8------------------------------------"));
+        player.sendMessage(Utils.color("&8-----------------------------------"));
+        if (quest.getNextStage() != null) {
+            com.leonardobishop.quests.common.quest.Quest q = Main.getQuestPlugin().getQuestManager().getQuestById(quest.getNextStage().name());
+            if (q == null) return;
+            event.getQuestPlayer().startQuest(q);
+        }
 
         event.setQuestFinishMessage(null);
     }

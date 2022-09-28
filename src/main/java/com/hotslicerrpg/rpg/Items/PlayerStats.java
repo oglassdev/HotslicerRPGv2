@@ -49,7 +49,7 @@ public class PlayerStats {
     private Set<Stat> getItemStats(ItemStack item) {
         if (item == null || item.getType() == Material.AIR || item.getItemMeta() == null) return new HashSet<>();
         if (!Registry.hasItem(item)) return new HashSet<>();
-        return new HashSet<>(Arrays.asList(Registry.getItem(item).getStats()));
+        return ItemUtils.getModifiedStats(new ModifiedItem(item));
     }
 
     public void updateStats() {

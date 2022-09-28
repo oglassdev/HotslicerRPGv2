@@ -2,6 +2,7 @@ package com.hotslicerrpg.rpg;
 
 import com.hotslicerrpg.rpg.Items.*;
 import com.hotslicerrpg.rpg.Listeners.EntityDamage;
+import com.hotslicerrpg.rpg.Listeners.PlayerFish;
 import com.hotslicerrpg.rpg.Mining.MinesManager;
 import com.hotslicerrpg.rpg.Quests.QuestFinishListener;
 import com.leonardobishop.quests.bukkit.BukkitQuestsPlugin;
@@ -10,6 +11,7 @@ import me.lokka30.treasury.api.economy.EconomyProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -40,34 +42,37 @@ public final class Main extends JavaPlugin {
         new MobDrops(this);
         new EntityDamage(this);
         new QuestFinishListener(this);
+        new PlayerFish(this);
         //new ScriptFile(new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "Scripts" + File.separator + "Main.js"));
         List<Stat> stats = new ArrayList<>();
         stats.add(new Stat(StatType.MINING_SPEED,50));
         stats.add(new Stat(StatType.MINING_LUCK,10));
         stats.add(new Stat(StatType.BREAKING_POWER,1));
         Registry.addItem(new Item("DRILL_0", Material.PRISMARINE_SHARD,(short) 0,
-                "&abad Drill", new String[0], Rarity.COMMON,stats.toArray(new Stat[0])));
+                "&abad Drill", new String[0], Rarity.COMMON,stats.toArray(new Stat[0]),true));
 
+        Registry.addItem(new Item("RAW_FISH",Material.RAW_FISH, (short) 0, "Raw Fish", new String[0],
+                Rarity.COMMON,new Stat[0]));
         stats = new ArrayList<>();
         stats.add(new Stat(StatType.MINING_SPEED,200));
         stats.add(new Stat(StatType.MINING_LUCK,30));
         stats.add(new Stat(StatType.BREAKING_POWER,3));
         Registry.addItem(new Item("DRILL_1", Material.PRISMARINE_SHARD,(short) 0,
-                "&bdecent Drill", new String[0], Rarity.UNCOMMON,stats.toArray(new Stat[0])));
+                "&bdecent Drill", new String[0], Rarity.UNCOMMON,stats.toArray(new Stat[0]),true));
 
         stats = new ArrayList<>();
         stats.add(new Stat(StatType.MINING_SPEED,500));
         stats.add(new Stat(StatType.MINING_LUCK,80));
         stats.add(new Stat(StatType.BREAKING_POWER,4));
         Registry.addItem(new Item("DRILL_2", Material.PRISMARINE_SHARD,(short) 0,
-                "&bpoggers Drill", new String[0], Rarity.EPIC,stats.toArray(new Stat[0])));
+                "&bpoggers Drill", new String[0], Rarity.EPIC,stats.toArray(new Stat[0]),true));
 
         stats = new ArrayList<>();
         stats.add(new Stat(StatType.MINING_SPEED,1000));
         stats.add(new Stat(StatType.MINING_LUCK,100));
         stats.add(new Stat(StatType.BREAKING_POWER,5));
         Registry.addItem(new Item("DRILL_3", Material.PRISMARINE_SHARD,(short) 0,
-                "&depik Drill", new String[0], Rarity.LEGENDARY,stats.toArray(new Stat[0])));
+                "&depik Drill", new String[0], Rarity.LEGENDARY,stats.toArray(new Stat[0]),true));
 
         getCommand("spawnentity").setExecutor((sender, command, s, strings) -> {
             if (!(sender instanceof Player)) return true;
@@ -75,6 +80,13 @@ public final class Main extends JavaPlugin {
                     Registry.getItem("DRILL_1").getItem(),
                     Registry.getItem("DRILL_2").getItem(),
                     Registry.getItem("DRILL_3").getItem());
+            return true;
+        });
+        getCommand("test").setExecutor((commandSender, command, s, strings) -> {
+            Player player = (Player) commandSender;
+            ModifiedItem i = new ModifiedItem(player.getInventory().getItemInHand());
+            i.addModifier(new Modifier.StatModifier(StatType.MINING_SPEED, Modifier.Operation.ADD,1000));
+            i.applyModifiers();
             return true;
         });
         minesManager = new MinesManager(this);
